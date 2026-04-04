@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How DeepSeek Took Over the AI Conversation - Sparky AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 20px 32px 1px;
+    }
+
+    .header-container {
+      max-width: 1035px;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+    }
+
+    .header-logo img {
+      height: 34px;
+      width: auto;
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      line-height: 28px;
+      margin-top: 16px;
+    }
+
+    .header-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: #666;
+      line-height: 24px;
+      margin-top: 8px;
+      padding-bottom: 20px;
+    }
+
+    /* Main content */
+    .main-content {
+      background: #fff;
+      max-width: 1099px;
+      padding: 0 101px;
+    }
+
+    /* Article Header */
+    .article-header {
+      position: relative;
+    }
+
+    .hero-image-container {
+      position: relative;
+      width: 100%;
+      max-width: 896px;
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .btn-back,
+    .btn-share {
+      position: absolute;
+      top: 32px;
+      width: 44px;
+      height: 44px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-back {
+      left: 32px;
+    }
+
+    .btn-back svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .btn-share {
+      right: 32px;
+    }
+
+    .btn-share svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Meta bar */
+    .meta-bar {
+      background: #622e30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      height: 48px;
+      max-width: 896px;
+    }
+
+    .meta-bar span {
+      font-size: 18px;
+      font-weight: 400;
+      color: #fff;
+      line-height: 28px;
+    }
+
+    .meta-bar-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Article body */
+    .article-body {
+      padding: 40px 32px;
+      max-width: 896px;
+    }
+
+    .article-body h1 {
+      font-size: 48px;
+      font-weight: 700;
+      color: #333;
+      line-height: 60px;
+      margin-bottom: 40px;
+      max-width: 772px;
+    }
+
+    .article-body h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      line-height: 32px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .article-body p {
+      font-size: 18px;
+      font-weight: 400;
+      color: #666;
+      line-height: 34px;
+      margin-bottom: 24px;
+      max-width: 832px;
+    }
+
+    .highlight {
+      color: #ffad50;
+    }
+
+    .article-body p u {
+      text-decoration: underline;
+    }
+
+    /* Inline CTA */
+    .inline-cta {
+      background: linear-gradient(90deg, #f2715a 0%, #ef735c 25%, #eb745e 50%, #e87660 75%, #e47762 100%);
+      border-radius: 16px;
+      box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+      margin: 24px 0 24px;
+      max-width: 832px;
+    }
+
+    .inline-cta .cta-logo {
+      height: 54px;
+      width: auto;
+      margin-bottom: 12px;
+    }
+
+    .inline-cta p {
+      font-size: 24px;
+      font-weight: 500;
+      color: #fff;
+      line-height: normal;
+      margin-bottom: 24px;
+    }
+
+    .inline-cta .btn-cta {
+      display: inline-block;
+      background: #fff;
+      color: #f2715a;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 28px;
+      padding: 16px 40px;
+      border-radius: 9999px;
+      text-decoration: none;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      background: #fff;
+      border: 2px solid #e47762;
+      border-radius: 16px;
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 32px 48px 48px;
+      text-align: center;
+      margin: 40px 0 60px;
+      max-width: 832px;
+    }
+
+    .bottom-cta .cta-logo {
+      height: 54px;
+      width: auto;
+      margin-bottom: 24px;
+    }
+
+    .bottom-cta h3 {
+      font-size: 30px;
+      font-weight: 700;
+      color: #333;
+      line-height: 36px;
+      margin-bottom: 12px;
+    }
+
+    .bottom-cta p {
+      font-size: 18px;
+      font-weight: 400;
+      color: #666;
+      line-height: 28px;
+      margin-bottom: 32px;
+    }
+
+    .bottom-cta .btn-download {
+      display: inline-block;
+      background: #e47762;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 28px;
+      padding: 20px 56px;
+      border-radius: 9999px;
+      text-decoration: none;
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Audio player FAB */
+    .audio-fab {
+      position: fixed;
+      right: 40px;
+      bottom: 40px;
+      width: 56px;
+      height: 56px;
+      background: #f2715a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      border: none;
+      z-index: 100;
+    }
+
+    .audio-fab svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Footer image */
+    .footer-image {
+      max-width: 1099px;
+    }
+
+    .footer-image img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 0 16px;
+      }
+
+      .article-body h1 {
+        font-size: 32px;
+        line-height: 42px;
+      }
+
+      .article-body p {
+        font-size: 16px;
+        line-height: 30px;
+      }
+
+      .article-body h2 {
+        font-size: 20px;
+      }
+
+      .hero-image {
+        height: 280px;
+      }
+
+      .inline-cta p {
+        font-size: 18px;
+      }
+
+      .bottom-cta h3 {
+        font-size: 24px;
+      }
+
+      .header {
+        padding: 16px 16px 1px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="header-logo">
+        <img src="assets/sparky-logo.svg" alt="Sparky AI Logo">
+      </div>
+      <h1 class="header-title">Learn English with trending and latest stories</h1>
+      <p class="header-subtitle">Shared by Anushree</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Article Header -->
+    <section class="article-header">
+      <div class="hero-image-container">
+        <img class="hero-image" src="assets/hero-image.png" alt="DeepSeek App">
+        <button class="btn-back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 19L5 12L12 5" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19 12H5" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="btn-share" aria-label="Share">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 6.66667C16.3807 6.66667 17.5 5.54738 17.5 4.16667C17.5 2.78595 16.3807 1.66667 15 1.66667C13.6193 1.66667 12.5 2.78595 12.5 4.16667C12.5 5.54738 13.6193 6.66667 15 6.66667Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 12.5C6.38071 12.5 7.5 11.3807 7.5 10C7.5 8.61929 6.38071 7.5 5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 18.3333C16.3807 18.3333 17.5 17.214 17.5 15.8333C17.5 14.4526 16.3807 13.3333 15 13.3333C13.6193 13.3333 12.5 14.4526 12.5 15.8333C12.5 17.214 13.6193 18.3333 15 18.3333Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.15833 11.2583L12.85 14.575" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.8417 5.425L7.15833 8.74167" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Meta Bar -->
+      <div class="meta-bar">
+        <span>16 Feb '25</span>
+        <div class="meta-bar-divider"></div>
+        <span>TechCrunch</span>
+      </div>
+    </section>
+
+    <!-- Article Body -->
+    <article class="article-body">
+      <h1>How DeepSeek Took Over the AI Conversation</h1>
+
+      <p>
+        Artificial intelligence experienced its latest disruption when DeepSeek, a then almost-unheard-of name in the industry,
+        <span class="highlight">came out of nowhere</span> with a
+        <span class="highlight">model that rivalled</span>, if not outperformed, some of the biggest players in the space. Practically overnight, DeepSeek became the name
+        <u>dominating</u> AI conversations,
+        <u>overshadowing</u> the usual industry giants.
+      </p>
+
+      <p>
+        At first <u>glance</u>, its success could be attributed solely to technical achievement. DeepSeek's new model
+        <u>challenged</u> the notion that cutting-edge AI development required billion-dollar investments and massive computing power. Instead, it proved that thoughtful optimization and strategic efficiency could yield results just as impressive, if not more so, than brute-force computational dominance.
+      </p>
+
+      <!-- Inline CTA -->
+      <div class="inline-cta">
+        <img class="cta-logo" src="assets/sparky-logo.svg" alt="Sparky AI">
+        <p>Want to practice English speaking? Discuss this with Sparky.</p>
+        <a href="#" class="btn-cta">Get the app</a>
+      </div>
+
+      <p>
+        But there was more at play than just the numbers. The way DeepSeek captured attention, and held it, was a masterclass in positioning, messaging, and the power of an underdog narrative.
+      </p>
+
+      <h2>Letting the DeepSeek Product Shine</h2>
+
+      <p>
+        The launch itself was relatively quiet. There were no flashy press releases and no massive marketing campaigns. Instead, DeepSeek let its technology speak for itself,
+        <u>releasing benchmarking results</u> that showed its smaller, more efficient model outperforming much larger competitors. Within AI research circles,
+        <span class="highlight">this was enough to spark interest</span>, but what truly propelled DeepSeek into the mainstream conversation was an unexpected twist:
+        <u>OpenAI</u>'s public critique.
+      </p>
+
+      <p>
+        OpenAI intended to discredit the upstart when it suggested that DeepSeek may have used its proprietary code without permission. Instead, the accusation backfired spectacularly. Rather than tarnishing DeepSeek's reputation, it framed the company as a challenger to the establishment, drawing support from the AI community and beyond. Instead of skepticism, DeepSeek was met with curiosity. Could a smaller player really be capable of competing at this level?
+        <span class="highlight">The debate only fueled interest</span> in the company's work, turning what could have been a liability into a powerful marketing moment.
+      </p>
+
+      <h2>The Underdog Effect</h2>
+
+      <p>
+        DeepSeek's rise is a textbook example of the underdog narrative at work. People love rooting for the challenger, especially when the incumbent appears complacent or overly dominant.
+        <u>By positioning itself as a lean</u>, efficient alternative to the big players, DeepSeek tapped into a sentiment that has become increasingly common in AI: skepticism about whether massive spending on infrastructure truly equates to better results.
+      </p>
+
+      <p>
+        <span class="highlight">This narrative resonated</span> not just with developers and researchers, but with the broader tech community and even mainstream media. The story wasn't just about a new AI model—it was about disruption, efficiency, and the possibility that innovation doesn't always require the deepest pockets.
+      </p>
+
+      <h2>What This Means for AI Marketing</h2>
+
+      <p>
+        DeepSeek's success offers valuable lessons for anyone in the AI space. First, product quality still matters. No amount of marketing can
+        <u>compensate for technology</u> that doesn't deliver. Second, timing and positioning can amplify impact. By letting competitors inadvertently boost its profile, DeepSeek demonstrated that sometimes the best marketing comes from external validation—even when that validation is wrapped in criticism.
+      </p>
+
+      <p>
+        Finally, the power of
+        <span class="highlight">narrative cannot be underestimated.</span>
+        In a crowded market, being the scrappy upstart can be just as valuable as being the established leader. DeepSeek didn't just build a better model; it told a better story.
+      </p>
+
+      <!-- Bottom CTA -->
+      <div class="bottom-cta">
+        <img class="cta-logo" src="assets/sparky-logo.svg" alt="Sparky AI">
+        <h3>Learn English with topics of your interest</h3>
+        <p>Practice speaking. Build confidence.</p>
+        <a href="#" class="btn-download">Download Sparky</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer Image -->
+  <div class="footer-image">
+    <img src="assets/footer-image.png" alt="Speak English Confidently with Sparky">
+  </div>
+
+  <!-- Audio Player FAB -->
+  <button class="audio-fab" aria-label="Listen to article">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12.8333 5.48567C12.8331 5.32317 12.7847 5.16437 12.6943 5.02933C12.6039 4.89429 12.4756 4.78905 12.3254 4.7269C12.1753 4.66474 12.0101 4.64846 11.8507 4.6801C11.6913 4.71173 11.5449 4.78988 11.4298 4.90467L7.48183 8.8515C7.32947 9.00477 7.14821 9.12629 6.94854 9.20899C6.74888 9.2917 6.53478 9.33397 6.31867 9.33333H3.5C3.19058 9.33333 2.89383 9.45625 2.67504 9.67504C2.45625 9.89384 2.33333 10.1906 2.33333 10.5V17.5C2.33333 17.8094 2.45625 18.1062 2.67504 18.325C2.89383 18.5437 3.19058 18.6667 3.5 18.6667H6.31867C6.53478 18.666 6.74888 18.7083 6.94854 18.791C7.14821 18.8737 7.32947 18.9952 7.48183 19.1485L11.4287 23.0965C11.5437 23.2118 11.6904 23.2903 11.8501 23.3221C12.0098 23.3539 12.1753 23.3377 12.3257 23.2753C12.4762 23.213 12.6047 23.1074 12.6951 22.9719C12.7854 22.8364 12.8336 22.6772 12.8333 22.5143V5.48567Z" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18.6667 10.5C19.424 11.5097 19.8333 12.7378 19.8333 14C19.8333 15.2622 19.424 16.4903 18.6667 17.5" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22.5913 21.4247C23.5664 20.4497 24.3398 19.2921 24.8675 18.0182C25.3952 16.7443 25.6668 15.3789 25.6668 14C25.6668 12.6211 25.3952 11.2557 24.8675 9.98179C24.3398 8.70787 23.5664 7.55035 22.5913 6.57533" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+</body>
+</html>
