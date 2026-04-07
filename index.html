@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How DeepSeek Took Over the AI Conversation - Sparky AI</title>
+  <title>Sparky AI - Learn English</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,6 +19,47 @@
       background-color: #f8f9fa;
       color: #333;
       -webkit-font-smoothing: antialiased;
+    }
+
+    /* Loading state */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      font-size: 18px;
+      color: #666;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e5e7eb;
+      border-top-color: #e47762;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      font-size: 18px;
+      color: #666;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .error-state h2 {
+      color: #333;
+      margin-bottom: 8px;
     }
 
     /* Header */
@@ -176,8 +217,57 @@
       color: #ffad50;
     }
 
-    .article-body p u {
+    .top-word {
       text-decoration: underline;
+    }
+
+    /* Grammar highlight tooltip */
+    .grammar-highlight {
+      color: #ffad50;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .grammar-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+      width: 300px;
+      z-index: 50;
+      text-align: left;
+    }
+
+    .grammar-highlight:hover .grammar-tooltip,
+    .grammar-highlight:focus .grammar-tooltip {
+      display: block;
+    }
+
+    .grammar-tooltip .tooltip-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e47762;
+      margin-bottom: 4px;
+    }
+
+    .grammar-tooltip .tooltip-explanation {
+      font-size: 13px;
+      color: #666;
+      line-height: 20px;
+      margin-bottom: 8px;
+    }
+
+    .grammar-tooltip .tooltip-example {
+      font-size: 13px;
+      color: #333;
+      font-style: italic;
+      line-height: 20px;
     }
 
     /* Inline CTA */
@@ -290,15 +380,25 @@
       height: 28px;
     }
 
+    .audio-fab.playing {
+      background: #445155;
+    }
+
     /* Footer image */
     .footer-image {
-      max-width: 1099px;
+      width: 100%;
+      overflow: hidden;
     }
 
     .footer-image img {
       width: 100%;
       display: block;
       object-fit: cover;
+    }
+
+    /* Hide content until loaded */
+    .article-content {
+      display: none;
     }
 
     /* Responsive */
@@ -347,6 +447,10 @@
         height: 40px;
         width: 184px;
       }
+
+      .grammar-tooltip {
+        width: 240px;
+      }
     }
   </style>
 </head>
@@ -363,126 +467,279 @@
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Article Header -->
-    <section class="article-header">
-      <div class="hero-image-container">
-        <img class="hero-image" src="assets/hero-image.png" alt="DeepSeek App">
-        <button class="btn-back" aria-label="Go back">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 19L5 12L12 5" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M19 12H5" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <button class="btn-share" aria-label="Share">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 6.66667C16.3807 6.66667 17.5 5.54738 17.5 4.16667C17.5 2.78595 16.3807 1.66667 15 1.66667C13.6193 1.66667 12.5 2.78595 12.5 4.16667C12.5 5.54738 13.6193 6.66667 15 6.66667Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M5 12.5C6.38071 12.5 7.5 11.3807 7.5 10C7.5 8.61929 6.38071 7.5 5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M15 18.3333C16.3807 18.3333 17.5 17.214 17.5 15.8333C17.5 14.4526 16.3807 13.3333 15 13.3333C13.6193 13.3333 12.5 14.4526 12.5 15.8333C12.5 17.214 13.6193 18.3333 15 18.3333Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M7.15833 11.2583L12.85 14.575" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M12.8417 5.425L7.15833 8.74167" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-
-      <!-- Meta Bar -->
-      <div class="meta-bar">
-        <span>16 Feb '25</span>
-        <div class="meta-bar-divider"></div>
-        <span>TechCrunch</span>
-      </div>
-    </section>
-
-    <!-- Article Body -->
-    <article class="article-body">
-      <h1>How DeepSeek Took Over the AI Conversation</h1>
-
-      <p>
-        Artificial intelligence experienced its latest disruption when DeepSeek, a then almost-unheard-of name in the industry,
-        <span class="highlight">came out of nowhere</span> with a
-        <span class="highlight">model that rivalled</span>, if not outperformed, some of the biggest players in the space. Practically overnight, DeepSeek became the name
-        <u>dominating</u> AI conversations,
-        <u>overshadowing</u> the usual industry giants.
-      </p>
-
-      <p>
-        At first <u>glance</u>, its success could be attributed solely to technical achievement. DeepSeek's new model
-        <u>challenged</u> the notion that cutting-edge AI development required billion-dollar investments and massive computing power. Instead, it proved that thoughtful optimization and strategic efficiency could yield results just as impressive, if not more so, than brute-force computational dominance.
-      </p>
-
-      <!-- Inline CTA -->
-      <div class="inline-cta">
-        <img class="cta-logo" src="assets/sparky-logo.svg" alt="Sparky AI">
-        <p>Want to practice English speaking? Discuss this with Sparky.</p>
-        <a href="#" class="btn-cta">Get the app</a>
-      </div>
-
-      <p>
-        But there was more at play than just the numbers. The way DeepSeek captured attention, and held it, was a masterclass in positioning, messaging, and the power of an underdog narrative.
-      </p>
-
-      <h2>Letting the DeepSeek Product Shine</h2>
-
-      <p>
-        The launch itself was relatively quiet. There were no flashy press releases and no massive marketing campaigns. Instead, DeepSeek let its technology speak for itself,
-        <u>releasing benchmarking results</u> that showed its smaller, more efficient model outperforming much larger competitors. Within AI research circles,
-        <span class="highlight">this was enough to spark interest</span>, but what truly propelled DeepSeek into the mainstream conversation was an unexpected twist:
-        <u>OpenAI</u>'s public critique.
-      </p>
-
-      <p>
-        OpenAI intended to discredit the upstart when it suggested that DeepSeek may have used its proprietary code without permission. Instead, the accusation backfired spectacularly. Rather than tarnishing DeepSeek's reputation, it framed the company as a challenger to the establishment, drawing support from the AI community and beyond. Instead of skepticism, DeepSeek was met with curiosity. Could a smaller player really be capable of competing at this level?
-        <span class="highlight">The debate only fueled interest</span> in the company's work, turning what could have been a liability into a powerful marketing moment.
-      </p>
-
-      <h2>The Underdog Effect</h2>
-
-      <p>
-        DeepSeek's rise is a textbook example of the underdog narrative at work. People love rooting for the challenger, especially when the incumbent appears complacent or overly dominant.
-        <u>By positioning itself as a lean</u>, efficient alternative to the big players, DeepSeek tapped into a sentiment that has become increasingly common in AI: skepticism about whether massive spending on infrastructure truly equates to better results.
-      </p>
-
-      <p>
-        <span class="highlight">This narrative resonated</span> not just with developers and researchers, but with the broader tech community and even mainstream media. The story wasn't just about a new AI model—it was about disruption, efficiency, and the possibility that innovation doesn't always require the deepest pockets.
-      </p>
-
-      <h2>What This Means for AI Marketing</h2>
-
-      <p>
-        DeepSeek's success offers valuable lessons for anyone in the AI space. First, product quality still matters. No amount of marketing can
-        <u>compensate for technology</u> that doesn't deliver. Second, timing and positioning can amplify impact. By letting competitors inadvertently boost its profile, DeepSeek demonstrated that sometimes the best marketing comes from external validation—even when that validation is wrapped in criticism.
-      </p>
-
-      <p>
-        Finally, the power of
-        <span class="highlight">narrative cannot be underestimated.</span>
-        In a crowded market, being the scrappy upstart can be just as valuable as being the established leader. DeepSeek didn't just build a better model; it told a better story.
-      </p>
-
-      <!-- Bottom CTA -->
-      <div class="bottom-cta">
-        <img class="cta-logo" src="assets/sparky-logo.svg" alt="Sparky AI">
-        <h3>Learn English with topics of your interest</h3>
-        <p>Practice speaking. Build confidence.</p>
-        <a href="#" class="btn-download">Download Sparky</a>
-      </div>
-    </article>
-  </main>
-
-  <!-- Footer Image -->
-  <div class="footer-image">
-    <img src="assets/footer-image.png" alt="Speak English Confidently with Sparky">
+  <!-- Loading State -->
+  <div class="loading" id="loading-state">
+    <div class="loading-spinner"></div>
+    <span>Loading article...</span>
   </div>
 
-  <!-- Audio Player FAB -->
-  <button class="audio-fab" aria-label="Listen to article">
-    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12.8333 5.48567C12.8331 5.32317 12.7847 5.16437 12.6943 5.02933C12.6039 4.89429 12.4756 4.78905 12.3254 4.7269C12.1753 4.66474 12.0101 4.64846 11.8507 4.6801C11.6913 4.71173 11.5449 4.78988 11.4298 4.90467L7.48183 8.8515C7.32947 9.00477 7.14821 9.12629 6.94854 9.20899C6.74888 9.2917 6.53478 9.33397 6.31867 9.33333H3.5C3.19058 9.33333 2.89383 9.45625 2.67504 9.67504C2.45625 9.89384 2.33333 10.1906 2.33333 10.5V17.5C2.33333 17.8094 2.45625 18.1062 2.67504 18.325C2.89383 18.5437 3.19058 18.6667 3.5 18.6667H6.31867C6.53478 18.666 6.74888 18.7083 6.94854 18.791C7.14821 18.8737 7.32947 18.9952 7.48183 19.1485L11.4287 23.0965C11.5437 23.2118 11.6904 23.2903 11.8501 23.3221C12.0098 23.3539 12.1753 23.3377 12.3257 23.2753C12.4762 23.213 12.6047 23.1074 12.6951 22.9719C12.7854 22.8364 12.8336 22.6772 12.8333 22.5143V5.48567Z" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M18.6667 10.5C19.424 11.5097 19.8333 12.7378 19.8333 14C19.8333 15.2622 19.424 16.4903 18.6667 17.5" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M22.5913 21.4247C23.5664 20.4497 24.3398 19.2921 24.8675 18.0182C25.3952 16.7443 25.6668 15.3789 25.6668 14C25.6668 12.6211 25.3952 11.2557 24.8675 9.98179C24.3398 8.70787 23.5664 7.55035 22.5913 6.57533" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
+  <!-- Error State -->
+  <div class="error-state" id="error-state" style="display: none;">
+    <h2>Article not found</h2>
+    <p>Sorry, we couldn't load this article. The link may be invalid or expired.</p>
+  </div>
+
+  <!-- Article Content (hidden until loaded) -->
+  <div class="article-content" id="article-content">
+    <main class="main-content">
+      <!-- Article Header -->
+      <section class="article-header">
+        <div class="hero-image-container">
+          <img class="hero-image" id="hero-image" src="" alt="">
+          <button class="btn-back" aria-label="Go back" onclick="history.back()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 19L5 12L12 5" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19 12H5" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="btn-share" aria-label="Share" id="btn-share">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 6.66667C16.3807 6.66667 17.5 5.54738 17.5 4.16667C17.5 2.78595 16.3807 1.66667 15 1.66667C13.6193 1.66667 12.5 2.78595 12.5 4.16667C12.5 5.54738 13.6193 6.66667 15 6.66667Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12.5C6.38071 12.5 7.5 11.3807 7.5 10C7.5 8.61929 6.38071 7.5 5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 18.3333C16.3807 18.3333 17.5 17.214 17.5 15.8333C17.5 14.4526 16.3807 13.3333 15 13.3333C13.6193 13.3333 12.5 14.4526 12.5 15.8333C12.5 17.214 13.6193 18.3333 15 18.3333Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.15833 11.2583L12.85 14.575" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.8417 5.425L7.15833 8.74167" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Meta Bar -->
+        <div class="meta-bar">
+          <span id="article-date"></span>
+          <div class="meta-bar-divider"></div>
+          <span id="article-source"></span>
+        </div>
+      </section>
+
+      <!-- Article Body -->
+      <article class="article-body">
+        <h1 id="article-title"></h1>
+
+        <div id="article-text"></div>
+
+        <!-- Inline CTA -->
+        <div class="inline-cta">
+          <img class="cta-logo" src="assets/sparky-logo.svg" alt="Sparky AI">
+          <p>Want to practice English speaking? Discuss this with Sparky.</p>
+          <a href="#" class="btn-cta">Get the app</a>
+        </div>
+
+        <div id="article-text-continued"></div>
+
+        <!-- Bottom CTA -->
+        <div class="bottom-cta">
+          <img class="cta-logo" src="assets/sparky-logo.svg" alt="Sparky AI">
+          <h3>Learn English with topics of your interest</h3>
+          <p>Practice speaking. Build confidence.</p>
+          <a href="#" class="btn-download">Download Sparky</a>
+        </div>
+      </article>
+    </main>
+
+    <!-- Footer Image -->
+    <div class="footer-image">
+      <img src="assets/footer-image.png" alt="Speak English Confidently with Sparky">
+    </div>
+
+    <!-- Audio Player FAB -->
+    <button class="audio-fab" id="audio-fab" aria-label="Listen to article">
+      <svg id="audio-icon-play" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.8333 5.48567C12.8331 5.32317 12.7847 5.16437 12.6943 5.02933C12.6039 4.89429 12.4756 4.78905 12.3254 4.7269C12.1753 4.66474 12.0101 4.64846 11.8507 4.6801C11.6913 4.71173 11.5449 4.78988 11.4298 4.90467L7.48183 8.8515C7.32947 9.00477 7.14821 9.12629 6.94854 9.20899C6.74888 9.2917 6.53478 9.33397 6.31867 9.33333H3.5C3.19058 9.33333 2.89383 9.45625 2.67504 9.67504C2.45625 9.89384 2.33333 10.1906 2.33333 10.5V17.5C2.33333 17.8094 2.45625 18.1062 2.67504 18.325C2.89383 18.5437 3.19058 18.6667 3.5 18.6667H6.31867C6.53478 18.666 6.74888 18.7083 6.94854 18.791C7.14821 18.8737 7.32947 18.9952 7.48183 19.1485L11.4287 23.0965C11.5437 23.2118 11.6904 23.2903 11.8501 23.3221C12.0098 23.3539 12.1753 23.3377 12.3257 23.2753C12.4762 23.213 12.6047 23.1074 12.6951 22.9719C12.7854 22.8364 12.8336 22.6772 12.8333 22.5143V5.48567Z" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.6667 10.5C19.424 11.5097 19.8333 12.7378 19.8333 14C19.8333 15.2622 19.424 16.4903 18.6667 17.5" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22.5913 21.4247C23.5664 20.4497 24.3398 19.2921 24.8675 18.0182C25.3952 16.7443 25.6668 15.3789 25.6668 14C25.6668 12.6211 25.3952 11.2557 24.8675 9.98179C24.3398 8.70787 23.5664 7.55035 22.5913 6.57533" stroke="white" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+    const API_BASE = "https://lms.sparkyai.app/api/v1/public_news";
+
+    // Audio state
+    let audio = null;
+    let isPlaying = false;
+
+    // Format date like "7 Apr '26"
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const day = date.getDate();
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const month = months[date.getMonth()];
+      const year = String(date.getFullYear()).slice(2);
+      return `${day} ${month} '${year}`;
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Process text: apply grammar highlights (orange) and top_words (underline)
+    function processText(text, topWords, grammarHighlights) {
+      let html = escapeHtml(text);
+
+      // Apply grammar highlights — sort by position in text (like the app), wrap in orange spans with tooltips
+      if (grammarHighlights && grammarHighlights.length > 0) {
+        var sorted = grammarHighlights
+          .map(function(gh) {
+            var escapedText = escapeHtml(gh.text);
+            var idx = html.indexOf(escapedText);
+            return idx !== -1 ? { gh: gh, escapedText: escapedText, index: idx } : null;
+          })
+          .filter(Boolean)
+          .sort(function(a, b) { return a.index - b.index; });
+
+        // Replace from last to first to preserve indices
+        for (var i = sorted.length - 1; i >= 0; i--) {
+          var item = sorted[i];
+          var tooltipHtml = '<span class="grammar-highlight" tabindex="0">' + item.escapedText + '<span class="grammar-tooltip"><div class="tooltip-title">' + escapeHtml(item.gh.grammar_pattern.name) + '</div><div class="tooltip-explanation">' + escapeHtml(item.gh.grammar_pattern.explanation) + '</div><div class="tooltip-example">"' + escapeHtml(item.gh.grammar_pattern.example) + '"</div></span></span>';
+          html = html.substring(0, item.index) + tooltipHtml + html.substring(item.index + item.escapedText.length);
+        }
+      }
+
+      // Apply top_words — underline them (case-insensitive, whole word, strip punctuation for matching)
+      if (topWords && topWords.length > 0) {
+        const normalize = function(w) { return w.toLowerCase().replace(/[.,!?;:()"'\-]/g, ""); };
+        const normalizedTopWords = topWords.map(normalize);
+        // Match words including adjacent punctuation
+        html = html.replace(/(?<![<\w\/])(\b\w+\b[.,!?;:()"'\-]?)(?![^<]*>)/g, function(match) {
+          if (normalizedTopWords.includes(normalize(match))) {
+            return '<span class="top-word">' + match + '</span>';
+          }
+          return match;
+        });
+      }
+
+      return html;
+    }
+
+    // Split text into paragraphs by sentence groups
+    function splitIntoParagraphs(text) {
+      const sentences = text.split(/(?<=\.)\s+/);
+      const paragraphs = [];
+      const perParagraph = Math.ceil(sentences.length / Math.max(Math.ceil(sentences.length / 4), 2));
+
+      for (let i = 0; i < sentences.length; i += perParagraph) {
+        paragraphs.push(sentences.slice(i, i + perParagraph).join(" "));
+      }
+      return paragraphs;
+    }
+
+    // Render the article
+    function renderArticle(article) {
+      // Title
+      document.getElementById("article-title").textContent = article.title;
+      document.title = `${article.title} - Sparky AI`;
+
+      // Hero image
+      const heroImg = document.getElementById("hero-image");
+      heroImg.src = article.image_url;
+      heroImg.alt = article.title;
+
+      // Date and source
+      document.getElementById("article-date").textContent = formatDate(article.date);
+      document.getElementById("article-source").textContent = article.source;
+
+      // Article text — use short_summary, split into paragraphs
+      const summary = article.short_summary || article.description;
+      const paragraphs = splitIntoParagraphs(summary);
+
+      // Split paragraphs: first half before CTA, second half after
+      const splitPoint = Math.ceil(paragraphs.length / 2);
+      const firstHalf = paragraphs.slice(0, splitPoint);
+      const secondHalf = paragraphs.slice(splitPoint);
+
+      const textContainer = document.getElementById("article-text");
+      const textContinued = document.getElementById("article-text-continued");
+
+      firstHalf.forEach(function(para) {
+        const p = document.createElement("p");
+        p.innerHTML = processText(para, article.top_words, article.grammar_highlights);
+        textContainer.appendChild(p);
+      });
+
+      secondHalf.forEach(function(para) {
+        const p = document.createElement("p");
+        p.innerHTML = processText(para, article.top_words, article.grammar_highlights);
+        textContinued.appendChild(p);
+      });
+
+      // Audio FAB
+      if (article.audio_url) {
+        const fab = document.getElementById("audio-fab");
+        fab.addEventListener("click", function() {
+          if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+            fab.classList.remove("playing");
+          } else {
+            if (!audio) {
+              audio = new Audio(article.audio_url);
+              audio.addEventListener("ended", function() {
+                isPlaying = false;
+                fab.classList.remove("playing");
+              });
+            }
+            audio.play();
+            isPlaying = true;
+            fab.classList.add("playing");
+          }
+        });
+      } else {
+        document.getElementById("audio-fab").style.display = "none";
+      }
+
+      // Share button
+      document.getElementById("btn-share").addEventListener("click", function() {
+        if (navigator.share) {
+          navigator.share({
+            title: article.title,
+            url: window.location.href,
+          });
+        } else {
+          navigator.clipboard.writeText(window.location.href);
+          alert("Link copied to clipboard!");
+        }
+      });
+
+      // Show content, hide loading
+      document.getElementById("loading-state").style.display = "none";
+      document.getElementById("article-content").style.display = "block";
+    }
+
+    // Main
+    (async function() {
+      const params = new URLSearchParams(window.location.search);
+      const shareId = params.get("id");
+
+      if (!shareId) {
+        document.getElementById("loading-state").style.display = "none";
+        document.getElementById("error-state").style.display = "flex";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/${encodeURIComponent(shareId)}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch article");
+        }
+
+        const data = await response.json();
+
+        if (!data.success || !data.article) {
+          throw new Error("Invalid article data");
+        }
+
+        renderArticle(data.article);
+      } catch (err) {
+        console.error("Error loading article:", err);
+        document.getElementById("loading-state").style.display = "none";
+        document.getElementById("error-state").style.display = "flex";
+      }
+    })();
+  </script>
 
 </body>
 </html>
