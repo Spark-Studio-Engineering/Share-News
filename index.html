@@ -463,7 +463,7 @@
         <img src="assets/sparky-logo.svg" alt="Sparky AI Logo">
       </div>
       <h1 class="header-title">Learn English with trending and latest stories</h1>
-      <p class="header-subtitle">Shared by Anushree</p>
+      <p class="header-subtitle" id="header-subtitle">Shared by Anushree</p>
     </div>
   </header>
 
@@ -727,6 +727,11 @@
       document.getElementById("footer-link").href = appLink;
 
       const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+      if (name) {
+        document.getElementById("header-subtitle").textContent = "Shared by " + name;
+      }
+
       const shareId = params.get("id");
 
       if (!shareId) {
