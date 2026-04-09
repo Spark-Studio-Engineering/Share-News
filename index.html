@@ -126,7 +126,6 @@
       display: block;
     }
 
-    .btn-back,
     .btn-share {
       position: absolute;
       top: 32px;
@@ -140,15 +139,6 @@
       box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.1);
       cursor: pointer;
       border: none;
-    }
-
-    .btn-back {
-      left: 32px;
-    }
-
-    .btn-back svg {
-      width: 24px;
-      height: 24px;
     }
 
     .btn-share {
@@ -185,32 +175,32 @@
 
     /* Article body */
     .article-body {
-      padding: 40px 32px;
+      padding: 40px 16px;
     }
 
     .article-body h1 {
-      font-size: 48px;
+      font-size: 28px;
       font-weight: 700;
       color: #333;
-      line-height: 60px;
-      margin-bottom: 40px;
+      line-height: 38px;
+      margin-bottom: 32px;
     }
 
     .article-body h2 {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 600;
       color: #333;
-      line-height: 32px;
-      margin-top: 40px;
-      margin-bottom: 20px;
+      line-height: 28px;
+      margin-top: 32px;
+      margin-bottom: 16px;
     }
 
     .article-body p {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 400;
       color: #666;
-      line-height: 34px;
-      margin-bottom: 24px;
+      line-height: 30px;
+      margin-bottom: 20px;
     }
 
     .highlight {
@@ -287,7 +277,7 @@
     }
 
     .inline-cta p {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 500;
       color: #fff;
       line-height: normal;
@@ -298,10 +288,10 @@
       display: inline-block;
       background: #fff;
       color: #f2715a;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
-      line-height: 28px;
-      padding: 16px 40px;
+      line-height: 24px;
+      padding: 14px 36px;
       border-radius: 9999px;
       text-decoration: none;
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -327,18 +317,18 @@
     }
 
     .bottom-cta h3 {
-      font-size: 30px;
+      font-size: 24px;
       font-weight: 700;
       color: #333;
-      line-height: 36px;
+      line-height: 32px;
       margin-bottom: 12px;
     }
 
     .bottom-cta p {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 400;
       color: #666;
-      line-height: 28px;
+      line-height: 24px;
       margin-bottom: 32px;
     }
 
@@ -346,10 +336,10 @@
       display: inline-block;
       background: #e47762;
       color: #fff;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 700;
-      line-height: 28px;
-      padding: 20px 56px;
+      line-height: 22px;
+      padding: 16px 44px;
       border-radius: 9999px;
       text-decoration: none;
       box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -408,17 +398,17 @@
       }
 
       .article-body h1 {
-        font-size: 32px;
-        line-height: 42px;
-      }
-
-      .article-body p {
-        font-size: 16px;
+        font-size: 22px;
         line-height: 30px;
       }
 
+      .article-body p {
+        font-size: 14px;
+        line-height: 26px;
+      }
+
       .article-body h2 {
-        font-size: 20px;
+        font-size: 18px;
       }
 
       .hero-image {
@@ -426,11 +416,11 @@
       }
 
       .inline-cta p {
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .bottom-cta h3 {
-        font-size: 24px;
+        font-size: 20px;
       }
 
       .header {
@@ -486,12 +476,6 @@
       <section class="article-header">
         <div class="hero-image-container">
           <img class="hero-image" id="hero-image" src="" alt="">
-          <button class="btn-back" aria-label="Close" onclick="window.close(); history.back();">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 6L6 18" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6 6L18 18" stroke="#445155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
           <button class="btn-share" aria-label="Share" id="btn-share">
             <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 6.66667C16.3807 6.66667 17.5 5.54738 17.5 4.16667C17.5 2.78595 16.3807 1.66667 15 1.66667C13.6193 1.66667 12.5 2.78595 12.5 4.16667C12.5 5.54738 13.6193 6.66667 15 6.66667Z" stroke="#333" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
