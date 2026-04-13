@@ -374,16 +374,71 @@
       background: #445155;
     }
 
-    /* Footer image */
-    .footer-image {
-      width: 100%;
-      overflow: hidden;
+    /* Footer hero section */
+    .footer-hero {
+      display: block;
+      background: #f5ede0;
+      padding: 64px 48px;
+      text-decoration: none;
+      color: inherit;
     }
 
-    .footer-image img {
+    .footer-hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    .footer-hero-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .footer-hero h2 {
+      font-size: 44px;
+      font-weight: 700;
+      color: #333;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .footer-hero p {
+      font-size: 18px;
+      font-weight: 400;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .footer-hero .btn-try {
+      display: inline-block;
+      background: #e47762;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 20px;
+      padding: 14px 32px;
+      border-radius: 36px;
+      text-decoration: none;
+      box-shadow: 0 1px 2px rgba(27, 28, 29, 0.48);
+      letter-spacing: -0.01em;
+    }
+
+    .footer-hero-image {
+      flex-shrink: 0;
+      width: 280px;
+      max-width: 40%;
+    }
+
+    .footer-hero-image img {
       width: 100%;
+      height: auto;
       display: block;
-      object-fit: cover;
+      transform: rotate(8deg);
     }
 
     /* Hide content until loaded */
@@ -440,6 +495,29 @@
 
       .grammar-tooltip {
         width: 240px;
+      }
+
+      .footer-hero {
+        padding: 48px 20px;
+      }
+
+      .footer-hero-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 32px;
+      }
+
+      .footer-hero h2 {
+        font-size: 28px;
+      }
+
+      .footer-hero p {
+        font-size: 15px;
+      }
+
+      .footer-hero-image {
+        width: 60%;
+        max-width: 240px;
       }
     }
   </style>
@@ -520,10 +598,19 @@
       </article>
     </main>
 
-    <!-- Footer Image -->
-    <a href="#" class="footer-image" id="footer-link" target="_blank" rel="noopener">
-      <img src="assets/footer-image.png" alt="Speak English Confidently with Sparky">
-    </a>
+    <!-- Footer Hero -->
+    <section class="footer-hero">
+      <div class="footer-hero-inner">
+        <div class="footer-hero-content">
+          <h2>Speak English Confidently, with Sparky</h2>
+          <p>Fastest way to build fluency. No judgement, no tests, just your AI friend who talks to you and helps you improve.</p>
+          <a href="#" class="btn-try" id="footer-link" target="_blank" rel="noopener">Try Sparky AI for FREE</a>
+        </div>
+        <div class="footer-hero-image">
+          <img src="https://framerusercontent.com/images/B58n0gexR6iVK1oQvwljhw2MslY.png?scale-down-to=1024" alt="Sparky AI app preview">
+        </div>
+      </div>
+    </section>
 
     <!-- Audio Player FAB -->
     <button class="audio-fab" id="audio-fab" aria-label="Listen to article">
